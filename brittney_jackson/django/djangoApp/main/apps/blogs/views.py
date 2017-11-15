@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
+# Create your views here.
 
 def index(request):
 	response = 'Placeholder to later display all the list of blogs'
@@ -31,4 +32,3 @@ def destroy(request):
 
 
 
-# Create your views here.

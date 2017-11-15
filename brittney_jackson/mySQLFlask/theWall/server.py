@@ -5,7 +5,7 @@ import md5
 app = Flask(__name__)
 app.secret_key = 'OopsOneMoreTime'
 
-mysql = MySQLConnector(app,'loginRegistration')
+mysql = MySQLConnector(app,'wall')
 
 def registrationVal(form_data):
     errors = False
@@ -33,8 +33,7 @@ def registrationVal(form_data):
     return errors    
 
 @app.route('/')
-def index():
-                               
+def index():                         
     return render_template('index.html') 
 
 @app.route('/register', methods=['POST'])
@@ -54,32 +53,64 @@ def register():
                  'email': request.form['email'],
                  'password': h_pw,
                }
-
+        flash('Successful Registration. Please Login Below.')
         print 'got all the information'
         mysql.query_db(query, data)
-        return redirect('/success')
-
+        return redirect('/')
 
 @app.route('/login', methods=['POST'])
 def login():
     email = request.form['email']
     password = md5.new(request.form['password']).hexdigest()
-    query = "SELECT * FROM users where users.email = :email AND users.password = :password"
-    data = { 'email': email, 'password': password}
+    query = "SELECT * FROM users WHERE users.email = :email AND users.password = :password"
+    data = { 'email': email, 'password': password }
     user = mysql.query_db(query, data)
- 
-    if request.form['email'] == data['email'] and password == data['password']:
+    session['name'] = user[0]['first_name']
+    
+
+    print session['name']
+
+    if user != []:
         print 'hello'
-        return redirect('/success')
+        session['userid'] = user[0]['id']
+        return redirect('/wall')
     else:
-        flash('wrong password!')
-        print 'oops'
-        return redirect('/')
+        flash('Oh No Big Fella. What is you doin?')
+        return redirect ('/')
 
-@app.route('/success')
-def home():
+@app.route('/wall')
+def wall():
+    return render_template('wall.html')
 
-    return render_template('success.html')
+@app.route('/message', methods=['POST'])
+def message():
+    query = "INSERT INTO messages (message, created_at, updated_at, users_id) VALUES (:message, NOW(), NOW(),:userid )"
+    data = {
+            'userid': session['userid'],
+            'message': request.form['message'],
+            }
+
+    
+    print 'got your message'
+    mysql.query_db(query, data)
+
+    return redirect('/wall')
+
+@app.route('/comment', methods=['POST'])
+def comment():
+    query = "INSERT INTO comments (comment, created_at, updated_at, users_id) VALUES (:comment, NOW(), NOW(), :userid)"
+    data = {
+            'userid': session['userid'],
+            'comment': request.form['comment'],
+            }
+
+    print 'got your comment'
+    mysql.query_db(query, data)
+
+
+    return redirect('/wall')
+
+
 
     
 app.run(debug=True)
