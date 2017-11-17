@@ -1,7 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from time import gmtime, strftime
-from django.utils.timezone import get_current_timezone
-tz = get_current_timezone()
+from time import gmtime, strftime, timezone
 
 def index(request):
 

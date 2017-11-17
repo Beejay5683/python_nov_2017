@@ -17,16 +17,31 @@
     			<input type="textarea" name="message">
     			<button>Post a messsage</button>
     		</form>
+            <hr>
 
     		<!-- insert messages here -->
+            {% for i in messages %}
 
-    		<!-- this should appear under each message -->
-    		<form action="/comment" method="post">
-    			<h4>Post A Comment</h4>
-    			<input type="textarea" name="message">
-    			<button>Post a comment</button>
-    		</form>
+                
+                <p><b>{{ i['first_name'] }} - {{ i['created_at'] }}</b></p>
+                <p>{{ i['messages'] }}</p>
+                <p>------------------------------------</p>
+                {% for k in comments%}
+                    {% if k['message_id']== i['id'] %}
+                    <p><b>{{ k['first_name'] }} - {{ k['created_at'] }}</b></p>
+                    <p>{{ k['comment'] }}</p>
+                    {% endif %}
+                {% endfor %}
 
+                <form action="/comment" method="post">
+                    <h4>Post A Comment</h4>
+                    <input type="hidden" name ="messageid" value="{{ i['id'] }}">
+                    <input type="textarea" name="comment">
+                    <button>Post a comment</button>
+                </form>
+                <hr>
+            {% endfor %}
+    	
     	</div>
 
 

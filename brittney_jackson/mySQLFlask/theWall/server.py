@@ -30,7 +30,7 @@ def registrationVal(form_data):
         flash('passwords must match')
         errors = True
     print errors
-    return errors    
+    return errors   
 
 @app.route('/')
 def index():                         
@@ -51,7 +51,7 @@ def register():
                  'first_name': request.form['first_name'],
                  'last_name': request.form['last_name'],
                  'email': request.form['email'],
-                 'password': h_pw,
+                 'password': request.form['password'],
                }
         flash('Successful Registration. Please Login Below.')
         print 'got all the information'
@@ -61,56 +61,58 @@ def register():
 @app.route('/login', methods=['POST'])
 def login():
     email = request.form['email']
-    password = md5.new(request.form['password']).hexdigest()
+    password = request.form['password']
     query = "SELECT * FROM users WHERE users.email = :email AND users.password = :password"
     data = { 'email': email, 'password': password }
     user = mysql.query_db(query, data)
-    session['name'] = user[0]['first_name']
-    
-
-    print session['name']
 
     if user != []:
-        print 'hello'
+        session['name'] = user[0]['first_name']
         session['userid'] = user[0]['id']
+        print 'hello'+' '+session['name']+' '+str(session['userid'])
         return redirect('/wall')
     else:
-        flash('Oh No Big Fella. What is you doin?')
+        flash('Oh No Big Fella. What is you doin?? Wrong password/email combination!')
         return redirect ('/')
 
 @app.route('/wall')
 def wall():
-    return render_template('wall.html')
+
+    query = "SELECT messages.messages, users.first_name, messages.created_at, messages.id FROM messages JOIN users ON users.id = messages.user_id ORDER BY messages.created_at DESC"
+    data = {}
+    dbmessages = mysql.query_db(query, data)
+    
+
+    query2 = "SELECT comments.comment, users.first_name, comments.created_at, comments.message_id FROM comments JOIN users ON users.id = comments.user_id"
+    dbcomments = mysql.query_db(query2, data)
+
+    return render_template('wall.html', messages = dbmessages, comments = dbcomments)
 
 @app.route('/message', methods=['POST'])
 def message():
-    query = "INSERT INTO messages (message, created_at, updated_at, users_id) VALUES (:message, NOW(), NOW(),:userid )"
+    query = "INSERT INTO messages (messages, created_at, updated_at, user_id) VALUES (:message, NOW(), NOW(),:userid )"
     data = {
             'userid': session['userid'],
             'message': request.form['message'],
             }
 
-    
-    print 'got your message'
+    print 'got your message'+' '+session['name']
     mysql.query_db(query, data)
 
     return redirect('/wall')
 
 @app.route('/comment', methods=['POST'])
 def comment():
-    query = "INSERT INTO comments (comment, created_at, updated_at, users_id) VALUES (:comment, NOW(), NOW(), :userid)"
+    query = "INSERT INTO comments (comment, created_at, updated_at, user_id, message_id) VALUES (:comment, NOW(), NOW(), :userid, :messageid)"
     data = {
             'userid': session['userid'],
             'comment': request.form['comment'],
+            'messageid': request.form['messageid']
             }
 
-    print 'got your comment'
+    print 'got your comment'+' '+session['name']
     mysql.query_db(query, data)
 
-
     return redirect('/wall')
-
-
-
     
 app.run(debug=True)

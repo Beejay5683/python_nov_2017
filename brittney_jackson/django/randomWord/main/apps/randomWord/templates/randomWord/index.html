@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Random Word Generator</title>
+	</head>
+
+	<body>
+		<h1>Random Word Generator</h1>
+		<p>Random Word (attempt #{{ request.session.counter }})</p>
+		<h2>{{ random }}</h2>
+		<form action="/random_word" method="get">
+			<input type="submit" value="Generate New Word">
+			<input type="submit" value="Reset">
+		</form>
+
+
+	</body>
+</html>
