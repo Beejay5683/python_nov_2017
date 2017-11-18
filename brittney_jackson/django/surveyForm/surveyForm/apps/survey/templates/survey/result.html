@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Survey Form</title>
+	</head>
+
+	<body>
+		<h3>You have submitted this form {{ request.session.counter }} times!</h3>
+		<div id="resultForm ">
+		<h2>Submitted Information</h2>
+			<table>
+				<tr>
+					<td>Your Name: </td>
+					<td>{{ request.session.name }}</td>
+				</tr>
+				<tr>
+					<td>Dojo Location: </td>
+					<td>{{ request.session.location }}</td>
+				</tr>
+				<tr>
+					<td>Favorite Language: </td>
+					<td>{{ request.session.language }}</td>
+				</tr>
+				<tr>
+					<td>Comment (optional): </td>
+					<td>{{ request.session.comment }}</td>
+				</tr>
+			</table>
+			<form action="/" method="get">
+				<input type="submit" name="go back" value="Go Back">
+			</form>
+		</div>
+
+	</body>
+</html>
