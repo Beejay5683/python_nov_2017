@@ -7,9 +7,13 @@
 	<body>
 		<h1>Random Word Generator</h1>
 		<p>Random Word (attempt #{{ request.session.counter }})</p>
-		<h2>{{ random }}</h2>
-		<form action="/random_word" method="get">
+		<h2>{{ request.session.word }}</h2>
+		<form action="/generate" method="post">
+			{% csrf_token %}
 			<input type="submit" value="Generate New Word">
+		</form>
+		<form action="/reset" method="post">
+			{% csrf_token %}
 			<input type="submit" value="Reset">
 		</form>
 
