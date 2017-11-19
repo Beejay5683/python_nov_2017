@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Amadon</title>
+	</head>
+	<body>
+		<h2>Amadon Store!</h2>
+		<table>
+			<tr>
+				<th>Item</th>
+				<th>Price</th>
+				<th>Actions</th>
+			</tr>
+			<tr>
+				<td>Dojo T shirt</td>
+				<td>$19.99</td>
+				<td>
+					<form action="/buy" method="post">
+						{% csrf_token %}
+						<select name="quantity">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+						<input type='hidden' name='productid' value='shirt' />
+  						<input type='submit' value='Buy!' />
+					</form>
+				</td>
+			</tr>
+			<tr>
+				<td>Dojo Sweater</td>
+				<td>$29.99</td>
+				<td>
+					<form action="/buy" method="post">
+						{% csrf_token %}
+						<select name="quantity">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+						<input type='hidden' name='productid' value='sweater' />
+  						<input type='submit' value='Buy!' />
+					</form>
+				</td>
+			</tr>
+						<tr>
+				<td>Dojo Cup</td>
+				<td>$4.99</td>
+				<td>
+					<form action="/buy" method="post">
+						{% csrf_token %}
+						<select name="quantity">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+						<input type='hidden' name='productid' value='cup' />
+  						<input type='submit' value='Buy!' />
+					</form>
+				</td>
+			</tr>
+						<tr>
+				<td>Algorithm Book</td>
+				<td>$49.99</td>
+				<td>
+					<form action="/buy" method="post">
+						{% csrf_token %}
+						<select name="quantity">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+						<input type='hidden' name='productid' value='book' />
+  						<input type='submit' value='Buy!' />
+					</form>
+				</td>
+			</tr>
+
+
+
+
+
+		</table>
+
+
+
+
+
+
+	</body>
+</html>
