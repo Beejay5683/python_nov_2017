@@ -9,3 +9,6 @@ class Users(models.Model):
 	email_address = models.CharField(max_length=45)
 	created_at = models.DateTimeField(auto_now_add=True)
   	updated_at = models.DateTimeField(auto_now=True)
+
+	def __unicode__(self):
+		return "id: " + str(self.id) + ", email: " + self.email
